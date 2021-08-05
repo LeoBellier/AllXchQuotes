@@ -1,8 +1,9 @@
 import requests
 
-class Base():
 
-    def __init__(self, host: str, prefix: str,  url: str):
+class Base:
+
+    def __init__(self, host: str, prefix: str, url: str):
         self.host = host
         self.prefix = prefix
         self.headers = {'Accept': 'application/json', 'Content-Type': 'application/json'}

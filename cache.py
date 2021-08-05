@@ -1,43 +1,45 @@
 import asyncio
 
 from aiocache import caches, Cache
-from aiocache.serializers import StringSerializer, PickleSerializer
 
-from ..apis.api_gate import get_list_cotizacion
+from api_gate import get_list_quotes
 
 caches.set_config({
     'default': {
         'cache': "aiocache,SimpleMemoryCache",
         'serializer': {
-            'class' : "aiocache.serializers.StringSerializer"
+            'class': "aiocache.serializers.StringSerializer"
         }
     },
-    'redis_alt':{
+    'redis_alt': {
         'cache': "aiocache.RedisCache",
         'endpoint': "127.0.0.1",
         'port': 6379,
         'timeout': 1,
-        'serializer':{
+        'serializer': {
             'class': "aiocache.serializers.PickeSerializer"
         }, 'plugins': [
-            {'class':"aiocache.plugins.HitMissRatioPlugin"},
+            {'class': "aiocache.plugins.HitMissRatioPlugin"},
             {'class': "aiocache.plugins.TimingPlugin"}
         ]
     }
 })
 
-async def create_key():
+
+async def create_key() -> None:
     cache = caches.create(**caches.get_alias_config('redis_alt'))
-    key:str
+    key: str = 'gate'
     value = []
-    for i in get_list_cotizacion:
+    for i in get_list_quotes():
         value.append(i)
     cache = caches.get('default')
     await cache.set(key, value)
 
+
 async def default_cache():
     cache = caches.get('default')
     await cache.set("key", "value")
+
 
 async def alt_cache():
     cache = caches.create(**caches.get_alias_config('redis_alt'))
@@ -45,7 +47,8 @@ async def alt_cache():
     await cache.set("key", "value")
 
     assert await cache.get('key') == "value"
-    await cache.close() 
+    await cache.close()
+
 
 def test_alias():
     loop = asyncio.get_event_loop()
@@ -58,6 +61,6 @@ def test_alias():
 
     loop.run_until_complete(caches.get('default').close())
 
+
 if __name__ == "__main__":
     await create_key()
-

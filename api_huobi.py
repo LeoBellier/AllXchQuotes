@@ -8,7 +8,6 @@ class HuobiApi(Base):
 
     def get_price(self):
         all_data = self.get_all_data()
-        print(all_data)
         return Quote(exchange="hubio.io", price=all_data["tick"]["close"], coin=self.get_coin(), volume=all_data["tick"]["vol"])
 
     def get_coin(self) -> str:

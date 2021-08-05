@@ -1,0 +1,1 @@
+this is just an API with quotes of Chia Token in several crypto exchanges

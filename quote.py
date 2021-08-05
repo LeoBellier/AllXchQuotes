@@ -8,7 +8,7 @@ class QuotesBase(BaseModel):
     volume: float
 
 
-class Quotes(QuotesBase):
+class Quote(QuotesBase):
     is_active = bool
 
     class Config:

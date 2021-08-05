@@ -1,5 +1,5 @@
 from api_base import Base
-from quote import Quotes
+from quote import Quote
 
 
 class GateApi(Base):
@@ -8,8 +8,10 @@ class GateApi(Base):
 
     def get_price(self):
         all_data = self.get_all_data()
-        print(all_data)
-        return Quotes(exchange='gate.io', price=all_data['last'], coin='eth', volume=all_data['volume'])
+        return Quote(exchange='gate.io', price=all_data['last'], coin=self.get_coin(), volume=all_data['volume'])
+
+    def get_coin(self) -> str:
+        return self.url.split("_")[1]
 
 
 def get_list_quotes():

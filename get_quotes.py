@@ -1,6 +1,8 @@
-from api_gate import get_list_quotes
+import api_gate
+import api_huobi
 
 
 def get_all():
-    quotes = get_list_quotes()
+    quotes = api_gate.get_list_quotes()
+    quotes += api_huobi.get_list_quotes()
     return quotes
